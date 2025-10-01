@@ -51,6 +51,21 @@ Going through all the possible command line flags is out of scope here (please c
 but we've enumerated a few common parameter combos to get you up to speed quickly
 on how you can run your own `geth` instance.
 
+### Transparency Mainnet
+
+See the Transparency mainnet runbook for build/run/ops details:
+
+- docs/transparency-mainnet.md
+
+Quick start:
+
+```shell
+make geth
+./build/bin/geth --http --authrpc.addr 0.0.0.0 --authrpc.port 8551 --authrpc.jwtsecret /path/to/jwt.hex --bootnodes <enode-list>
+```
+
+Pair with a consensus client via Engine API on port 8551.
+
 ### Hardware Requirements
 
 Minimum:
