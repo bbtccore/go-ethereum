@@ -599,11 +599,16 @@ func (c *ChainConfig) Description() string {
 	var banner string
 
 	// Create some basic network config output
-	network := NetworkNames[c.ChainID.String()]
-	if network == "" {
-		network = "unknown"
-	}
-	banner += fmt.Sprintf("Chain ID:  %v (%s)\n", c.ChainID, network)
+    network := NetworkNames[c.ChainID.String()]
+    if network == "" {
+        network = "unknown"
+    }
+    // Display a friendly chain name for mainnet
+    display := network
+    if c.ChainID != nil && c.ChainID.Sign() > 0 && c.ChainID.Uint64() == 1 {
+        display = "Transparency Mainnet"
+    }
+    banner += fmt.Sprintf("Chain ID:  %v (%s)\n", c.ChainID, display)
 	switch {
 	case c.Ethash != nil:
 		banner += "Consensus: Beacon (proof-of-stake), merged from Ethash (proof-of-work)\n"

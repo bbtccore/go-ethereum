@@ -290,7 +290,7 @@ func main() {
 // This function should be called before launching devp2p stack.
 func prepare(ctx *cli.Context) {
 	// If we're running a known preset, log it for convenience.
-	switch {
+    switch {
 	case ctx.IsSet(utils.SepoliaFlag.Name):
 		log.Info("Starting Geth on Sepolia testnet...")
 
@@ -300,8 +300,8 @@ func prepare(ctx *cli.Context) {
 	case ctx.IsSet(utils.HoodiFlag.Name):
 		log.Info("Starting Geth on Hoodi testnet...")
 
-	case !ctx.IsSet(utils.NetworkIdFlag.Name):
-		log.Info("Starting Geth on Ethereum mainnet...")
+    case !ctx.IsSet(utils.NetworkIdFlag.Name):
+        log.Info("Starting Geth on Transparency Mainnet...")
 	}
 	// If we're a full node on mainnet without --cache specified, bump default cache allowance
 	if !ctx.IsSet(utils.CacheFlag.Name) && !ctx.IsSet(utils.NetworkIdFlag.Name) {
