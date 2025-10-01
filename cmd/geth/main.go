@@ -303,18 +303,17 @@ func prepare(ctx *cli.Context) {
     case !ctx.IsSet(utils.NetworkIdFlag.Name):
         log.Info("Starting Geth on Transparency Mainnet...")
 	}
-	// If we're a full node on mainnet without --cache specified, bump default cache allowance
-	if !ctx.IsSet(utils.CacheFlag.Name) && !ctx.IsSet(utils.NetworkIdFlag.Name) {
-		// Make sure we're not on any supported preconfigured testnet either
-		if !ctx.IsSet(utils.HoleskyFlag.Name) &&
-			!ctx.IsSet(utils.SepoliaFlag.Name) &&
-			!ctx.IsSet(utils.HoodiFlag.Name) &&
-			!ctx.IsSet(utils.DeveloperFlag.Name) {
-			// Nope, we're really on mainnet. Bump that cache up!
-			log.Info("Bumping default cache on mainnet", "provided", ctx.Int(utils.CacheFlag.Name), "updated", 4096)
-			ctx.Set(utils.CacheFlag.Name, strconv.Itoa(4096))
-		}
-	}
+    // If we're a full node on Transparency mainnet without --cache specified, bump default cache allowance
+    if !ctx.IsSet(utils.CacheFlag.Name) && !ctx.IsSet(utils.NetworkIdFlag.Name) {
+        // Make sure we're not on any supported preconfigured testnet either
+        if !ctx.IsSet(utils.HoleskyFlag.Name) &&
+            !ctx.IsSet(utils.SepoliaFlag.Name) &&
+            !ctx.IsSet(utils.HoodiFlag.Name) &&
+            !ctx.IsSet(utils.DeveloperFlag.Name) {
+            log.Info("Bumping default cache on mainnet", "provided", ctx.Int(utils.CacheFlag.Name), "updated", 4096)
+            ctx.Set(utils.CacheFlag.Name, strconv.Itoa(4096))
+        }
+    }
 }
 
 // geth is the main entry point into the system if no special subcommand is run.

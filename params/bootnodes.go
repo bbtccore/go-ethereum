@@ -37,6 +37,12 @@ var HoodiBootnodes = []string{
 	"enode://8ae4a48101b2299597341263da0deb47cc38aa4d3ef4b7430b897d49bfa10eb1ccfe1655679b1ed46928ef177fbf21b86837bd724400196c508427a6f41602cd@134.199.184.23:30303",
 }
 
+// TransparencyBootnodes are the enode URLs of the P2P bootstrap nodes running on the
+// Transparency main network.
+var TransparencyBootnodes = []string{
+    // Placeholder bootnodes; replace with real production nodes before launch
+}
+
 // HoleskyBootnodes are the enode URLs of the P2P bootstrap nodes running on the
 // Holesky test network.
 var HoleskyBootnodes = []string{
@@ -95,6 +101,8 @@ func KnownDNSNetwork(genesis common.Hash, protocol string) string {
 		net = "holesky"
 	case HoodiGenesisHash:
 		net = "hoodi"
+    case TransparencyGenesisHash:
+        net = "transparency-mainnet"
 	default:
 		return ""
 	}

@@ -214,7 +214,7 @@ func getGenesisState(db ethdb.Database, blockhash common.Hash) (alloc types.Gene
 	// - supported networks(mainnet, testnets), recover with defined allocations
 	// - private network, can't recover
 	var genesis *Genesis
-	switch blockhash {
+    switch blockhash {
 	case params.MainnetGenesisHash:
 		genesis = DefaultGenesisBlock()
 	case params.SepoliaGenesisHash:
@@ -223,6 +223,8 @@ func getGenesisState(db ethdb.Database, blockhash common.Hash) (alloc types.Gene
 		genesis = DefaultHoleskyGenesisBlock()
 	case params.HoodiGenesisHash:
 		genesis = DefaultHoodiGenesisBlock()
+    case params.TransparencyGenesisHash:
+        genesis = DefaultTransparencyGenesisBlock()
 	}
 	if genesis != nil {
 		return genesis.Alloc, nil
@@ -426,9 +428,9 @@ func LoadChainConfig(db ethdb.Database, genesis *Genesis) (cfg *params.ChainConf
 		}
 		return genesis.Config, ghash, nil
 	}
-	// There is no stored chain config and no new config provided,
-	// In this case the default chain config(mainnet) will be used
-	return params.MainnetChainConfig, params.MainnetGenesisHash, nil
+    // There is no stored chain config and no new config provided,
+    // Use Transparency mainnet as the default
+    return params.TransparencyChainConfig, params.TransparencyGenesisHash, nil
 }
 
 // chainConfigOrDefault retrieves the attached chain configuration. If the genesis
@@ -610,14 +612,7 @@ func EnableVerkleAtGenesis(db ethdb.Database, genesis *Genesis) (bool, error) {
 
 // DefaultGenesisBlock returns the Ethereum main net genesis block.
 func DefaultGenesisBlock() *Genesis {
-	return &Genesis{
-		Config:     params.MainnetChainConfig,
-		Nonce:      66,
-		ExtraData:  hexutil.MustDecode("0x11bbe8db4e347b4e8c937c1c8370e4b5ed33adb3db69cbdb7a38e1e50b1b82fa"),
-		GasLimit:   5000,
-		Difficulty: big.NewInt(17179869184),
-		Alloc:      decodePrealloc(mainnetAllocData),
-	}
+    return DefaultTransparencyGenesisBlock()
 }
 
 // DefaultSepoliaGenesisBlock returns the Sepolia network genesis block.
@@ -655,6 +650,19 @@ func DefaultHoodiGenesisBlock() *Genesis {
 		Timestamp:  1742212800,
 		Alloc:      decodePrealloc(hoodiAllocData),
 	}
+}
+
+// DefaultTransparencyGenesisBlock returns the Transparency mainnet genesis block.
+func DefaultTransparencyGenesisBlock() *Genesis {
+    return &Genesis{
+        Config:     params.TransparencyChainConfig,
+        Nonce:      0x72656379, // 'recy'
+        ExtraData:  []byte("Transparency Mainnet"),
+        GasLimit:   0x1c9c380,
+        Difficulty: big.NewInt(0x01),
+        Timestamp:  1751328000, // placeholder launch time (UTC)
+        Alloc:      types.GenesisAlloc{},
+    }
 }
 
 // DeveloperGenesisBlock returns the 'geth --dev' genesis block.

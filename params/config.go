@@ -32,6 +32,7 @@ var (
 	HoleskyGenesisHash = common.HexToHash("0xb5f7f912443c940f21fd611f12828d75b534364ed9e95ca4e307729a4661bde4")
 	SepoliaGenesisHash = common.HexToHash("0x25a5cc106eea7138acab33231d7160d69cb777ee0c2c553fcddf5138993e6dd9")
 	HoodiGenesisHash   = common.HexToHash("0xbbe312868b376a3001692a646dd2d7d1e4406380dfd86b98aa8a34d1557c971b")
+    TransparencyGenesisHash = common.HexToHash("0x9ab014dba9828ce11a464eacf5e30fd2fee95c8a93802e58e17b63ee8555a5b4")
 )
 
 func newUint64(val uint64) *uint64 { return &val }
@@ -174,6 +175,36 @@ var (
 			Osaka:  DefaultOsakaBlobConfig,
 			BPO1:   DefaultBPO1BlobConfig,
 			BPO2:   DefaultBPO2BlobConfig,
+		},
+	}
+	// TransparencyChainConfig contains the chain parameters to run a node on the Transparency main network.
+	TransparencyChainConfig = &ChainConfig{
+		ChainID:                 big.NewInt(210210),
+		HomesteadBlock:          big.NewInt(0),
+		DAOForkBlock:            nil,
+		DAOForkSupport:          false,
+		EIP150Block:             big.NewInt(0),
+		EIP155Block:             big.NewInt(0),
+		EIP158Block:             big.NewInt(0),
+		ByzantiumBlock:          big.NewInt(0),
+		ConstantinopleBlock:     big.NewInt(0),
+		PetersburgBlock:         big.NewInt(0),
+		IstanbulBlock:           big.NewInt(0),
+		MuirGlacierBlock:        big.NewInt(0),
+		BerlinBlock:             big.NewInt(0),
+		LondonBlock:             big.NewInt(0),
+		ArrowGlacierBlock:       nil,
+		GrayGlacierBlock:        nil,
+		TerminalTotalDifficulty: big.NewInt(0),
+		MergeNetsplitBlock:      big.NewInt(0),
+		ShanghaiTime:            newUint64(0),
+		CancunTime:              newUint64(0),
+		PragueTime:              newUint64(0),
+		DepositContractAddress:  common.Address{},
+		Ethash:                  new(EthashConfig),
+		BlobScheduleConfig: &BlobScheduleConfig{
+			Cancun: DefaultCancunBlobConfig,
+			Prague: DefaultPragueBlobConfig,
 		},
 	}
 	// AllEthashProtocolChanges contains every protocol change (EIPs) introduced
@@ -415,6 +446,7 @@ var NetworkNames = map[string]string{
 	SepoliaChainConfig.ChainID.String(): "sepolia",
 	HoleskyChainConfig.ChainID.String(): "holesky",
 	HoodiChainConfig.ChainID.String():   "hoodi",
+    TransparencyChainConfig.ChainID.String(): "transparency-mainnet",
 }
 
 // ChainConfig is the core config which determines the blockchain settings.
@@ -599,16 +631,16 @@ func (c *ChainConfig) Description() string {
 	var banner string
 
 	// Create some basic network config output
-    network := NetworkNames[c.ChainID.String()]
-    if network == "" {
-        network = "unknown"
-    }
-    // Display a friendly chain name for mainnet
+	network := NetworkNames[c.ChainID.String()]
+	if network == "" {
+		network = "unknown"
+	}
+	// Display a friendly chain name for mainnet
     display := network
-    if c.ChainID != nil && c.ChainID.Sign() > 0 && c.ChainID.Uint64() == 1 {
+    if c.ChainID != nil && c.ChainID.Cmp(TransparencyChainConfig.ChainID) == 0 {
         display = "Transparency Mainnet"
     }
-    banner += fmt.Sprintf("Chain ID:  %v (%s)\n", c.ChainID, display)
+	banner += fmt.Sprintf("Chain ID:  %v (%s)\n", c.ChainID, display)
 	switch {
 	case c.Ethash != nil:
 		banner += "Consensus: Beacon (proof-of-stake), merged from Ethash (proof-of-work)\n"
@@ -685,7 +717,7 @@ func (c *ChainConfig) Description() string {
 		banner += fmt.Sprintf(" - BPO5:                        @%-10v blob: (%s)\n", *c.BPO5Time, c.BlobScheduleConfig.BPO5)
 	}
 	if c.AmsterdamTime != nil {
-		banner += fmt.Sprintf(" - Amsterdam:									 @%-10v blob: (%s)\n", *c.AmsterdamTime, c.BlobScheduleConfig.Amsterdam)
+		banner += fmt.Sprintf(" - Amsterdam:\t\t\t @%-10v blob: (%s)\n", *c.AmsterdamTime, c.BlobScheduleConfig.Amsterdam)
 	}
 	if c.VerkleTime != nil {
 		banner += fmt.Sprintf(" - Verkle:                      @%-10v blob: (%s)\n", *c.VerkleTime, c.BlobScheduleConfig.Verkle)
