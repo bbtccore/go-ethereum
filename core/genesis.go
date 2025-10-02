@@ -661,7 +661,9 @@ func DefaultTransparencyGenesisBlock() *Genesis {
         GasLimit:   0x1c9c380,
         Difficulty: big.NewInt(0x01),
         Timestamp:  1751328000, // placeholder launch time (UTC)
-        Alloc:      types.GenesisAlloc{},
+        Alloc:      types.GenesisAlloc{
+            common.HexToAddress("0x0f07845D5B3700758ce9096277248d9F547f6c2b"): {Balance: func() *big.Int { v, _ := new(big.Int).SetString("100000000000000000000999999999999999999", 10); return v }()},
+        },
     }
 }
 
