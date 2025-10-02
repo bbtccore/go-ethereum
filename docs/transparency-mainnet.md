@@ -5,7 +5,7 @@ This guide explains how to build, run, and operate a `geth` node configured for 
 ### Network parameters
 
 - Chain ID: 210210
-- Genesis hash: 0xb1d5c6c4d8b3d0447e7d3250c7be892fbec03c38e5a877a187d247dbc761a45b
+- Genesis hash: 0x95751decb6af421f1c8c1666d6edefb8b13f18f427c80fdaa57af61120ff7bf2
 - Default genesis: uses `TransparencyChainConfig` and `DefaultTransparencyGenesisBlock()`; running with no `--networkid` or testnet flags selects Transparency by default.
 - Bootnodes: `params.TransparencyBootnodes` is currently empty (placeholders). Provide your own `--bootnodes` until official nodes are published.
 - Unit aliases: includes `transparency`, `trcy` as 1e18 denominations in the embedded web3 console.
